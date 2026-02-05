@@ -5,44 +5,31 @@
 //  Created by Alonso Acosta on 04/02/26.
 //
 
+import SwiftData
 import SwiftUI
 
 struct ContentView: View {
-    @AppStorage("Bookworm__notes") private var notes = ""
+    @Environment(\.modelContext) var modelContext
+    @Query var students: [Student]
+    
     var body: some View {
         NavigationStack {
-            List {
-                NavigationLink("TextField y TextEditor (no form)") {
-                    Text("Text Editor")
-                    TextEditor(text: $notes)
-                        .textFieldStyle(.roundedBorder)
+            List(students) { student in
+                Text(student.name)
+            }
+            .navigationTitle("Classroom")
+            .toolbar {
+                Button("Add") {
+                    let firstNames = ["Ginny", "Harry", "Hermione", "Luna", "Ron"]
+                    let lasNames = ["Granger", "Lovegood", "Potter", "Wesley"]
                     
-                    Text("Text Field (horizontal)")
-                    TextField("Enter your text", text: $notes)
-                        .textFieldStyle(.roundedBorder)
+                    let chooseFirstName = firstNames.randomElement()!
+                    let chooseLastName = lasNames.randomElement()!
                     
-                    Text("Text Field (vertical)")
-                    TextField("Enter your text", text: $notes, axis: .vertical)
-                        .textFieldStyle(.roundedBorder)
-                }
-                
-                NavigationLink("TextField y TextEditor (form)") {
-                    Form {
-                        Text("Text Editor")
-                        TextEditor(text: $notes)
-                            .textFieldStyle(.roundedBorder)
-                        
-                        Text("Text Field (horizontal)")
-                        TextField("Enter your text", text: $notes)
-                            .textFieldStyle(.roundedBorder)
-                        
-                        Text("Text Field (vertical)")
-                        TextField("Enter your text", text: $notes, axis: .vertical)
-                            .textFieldStyle(.roundedBorder)
-                    }
+                    let student = Student(id: UUID(), name: "\(chooseFirstName) \(chooseLastName)")
+                    modelContext.insert(student)
                 }
             }
-            .navigationTitle("")
         }
     }
 }
