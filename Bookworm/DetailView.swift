@@ -32,15 +32,19 @@ struct DetailView: View {
                     .offset(x: -5, y: -5)
             }
             
-            Text(book.author)
-                .font(.title)
-                .foregroundStyle(.secondary)
-            
-            Text(book.review)
-                .padding()
-            
-            RatingView(rating: .constant(book.rating))
-                .font(.largeTitle)
+            VStack {
+                Text(book.author)
+                    .font(.largeTitle)
+                Text(book.addedAt.formatted(date: .abbreviated, time: .omitted))
+                    .font(.title)
+                    .padding(3)
+                RatingView(rating: .constant(book.rating))
+                    .font(.title3)
+                
+                Text(book.review)
+                    .padding(20)
+            }
+            .padding()
         }
         .navigationTitle(book.title)
         .navigationBarTitleDisplayMode(.inline)

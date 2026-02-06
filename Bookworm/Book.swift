@@ -15,6 +15,7 @@ class Book {
     var genre: String
     var review: String
     var rating: Int
+    var addedAt: Date = Date.now
     
     var isEmpty: Bool {
         if title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
