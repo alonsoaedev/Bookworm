@@ -12,11 +12,13 @@ struct AddBookView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
-    @State private var title: String = ""
-    @State private var author: String = ""
-    @State private var rating: Int = 3
-    @State private var genre: String = "Fantasy"
-    @State private var review: String = ""
+    @State private var book = Book(
+        title: "",
+        author: "",
+        genre: "Fantasy",
+        review: "",
+        rating: 3
+    )
     
     let genres = ["Fantasy", "Horror", "Kids", "Mystery", "Poetry", "Romance", "Thriller"]
     
@@ -24,10 +26,10 @@ struct AddBookView: View {
         NavigationStack {
             Form {
                 Section {
-                    TextField("Name of book", text: $title)
-                    TextField("Author's name", text: $author)
+                    TextField("Name of book", text: $book.title)
+                    TextField("Author's name", text: $book.author)
                     
-                    Picker("Genre", selection: $genre) {
+                    Picker("Genre", selection: $book.genre) {
                         ForEach(genres, id: \.self) { genre in
                             Text(genre)
                         }
@@ -35,23 +37,17 @@ struct AddBookView: View {
                 }
                 
                 Section("Write a review") {
-                    TextEditor(text: $review)
-                    RatingView(rating: $rating)
+                    TextEditor(text: $book.review)
+                    RatingView(rating: $book.rating)
                 }
                 
                 Section {
                     Button("Save") {
-                        let newBook = Book(
-                            title: title,
-                            author: author,
-                            genre: genre,
-                            review: review,
-                            rating: rating
-                        )
-                        modelContext.insert(newBook)
+                        modelContext.insert(book)
                         dismiss()
                     }
                 }
+                .disabled(book.isEmpty)
             }
             .navigationTitle("Add Book")
         }

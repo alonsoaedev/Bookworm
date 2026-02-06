@@ -16,6 +16,15 @@ class Book {
     var review: String
     var rating: Int
     
+    var isEmpty: Bool {
+        if title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+            author.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+            genre.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return true
+        }
+        return false
+    }
+    
     init(title: String, author: String, genre: String, review: String, rating: Int) {
         self.title = title
         self.author = author
